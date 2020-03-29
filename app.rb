@@ -65,12 +65,11 @@ decoded_applist.applist.apps.each do |app|
         FileUtils.mkdir_p("output/#{app.name.gsub(/\\,\/,\:,\*,\?,\",\<,\>,\|/, '-')} (#{app.appid})/logos")
         File.open("output/#{app.name.gsub(/\\,\/,\:,\*,\?,\",\<,\>,\|/, '-')} (#{app.appid})/logos/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
         puts "Saved logo #{grid.id} to output/#{app.name.gsub(/\\,\/,\:,\*,\?,\",\<,\>,\|/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
-        puts ""
       end
     end
   rescue RestClient::NotFound
     puts "No logos found for #{app.name}"
     puts ""
   end
-
+  puts ""
 end
