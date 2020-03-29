@@ -30,7 +30,7 @@ decoded_applist.applist.apps.each do |app|
     res.body.json.data.each do |grid|
       image = RestClient.get(grid.url)
       FileUtils.mkdir_p("output/#{app.name} (#{app.appid})/grids")
-      File.open("output/#{app.name} (#{app.appid})/grids/#{grid.url.split('/')}", 'w') { |f| f.write(image.body) }
+      File.open("output/#{app.name} (#{app.appid})/grids/#{grid.url.split('/').last}", 'w') { |f| f.write(image.body) }
     end
   rescue RestClient::NotFound
     puts "No grids found for #{app.name}"
@@ -42,7 +42,7 @@ decoded_applist.applist.apps.each do |app|
     res.body.json.data.each do |grid|
       image = RestClient.get(grid.url)
       FileUtils.mkdir_p("output/#{app.name} (#{app.appid})/heroes")
-      File.open("output/#{app.name} (#{app.appid})/heroes/#{grid.url.split('/')}", 'w') { |f| f.write(image.body) }
+      File.open("output/#{app.name} (#{app.appid})/heroes/#{grid.url.split('/').last}", 'w') { |f| f.write(image.body) }
     end
   rescue RestClient::NotFound
     puts "No logos found for #{app.name}"
@@ -54,7 +54,7 @@ decoded_applist.applist.apps.each do |app|
     res.body.json.data.each do |grid|
       image = RestClient.get(grid.url)
       FileUtils.mkdir_p("output/#{app.name} (#{app.appid})/logos")
-      File.open("output/#{app.name} (#{app.appid})/logos/#{grid.url.split('/')}", 'w') { |f| f.write(image.body) }
+      File.open("output/#{app.name} (#{app.appid})/logos/#{grid.url.split('/').last}", 'w') { |f| f.write(image.body) }
     end
   rescue RestClient::NotFound
     puts "No logos found for #{app.name}"
