@@ -26,6 +26,8 @@ decoded_applist.applist.apps.each do |app|
   rescue RestClient::Unauthorized
     puts "Unauthorized, fill in your API key for Steam Grid DB on line 6"
     exit 1
+  rescue RestClient::Exceptions::OpenTimeout
+    puts "Timed out connecting to https://www.steamgriddb.com/api/v2/games/steam/#{app.appid}"
   end
 
   begin
@@ -45,6 +47,8 @@ decoded_applist.applist.apps.each do |app|
     end
   rescue RestClient::NotFound
     puts "No grids found for #{app.name}"
+  rescue RestClient::Exceptions::OpenTimeout
+    puts "Timed out connecting to https://www.steamgriddb.com/api/v2/grids/game/#{grid_id}"
   end
 
   begin
@@ -64,6 +68,8 @@ decoded_applist.applist.apps.each do |app|
     end
   rescue RestClient::NotFound
     puts "No heroes found for #{app.name}"
+  rescue RestClient::Exceptions::OpenTimeout
+    puts "Timed out connecting to https://www.steamgriddb.com/api/v2/heroes/game/#{grid_id}"
   end
 
   begin
@@ -83,6 +89,9 @@ decoded_applist.applist.apps.each do |app|
     end
   rescue RestClient::NotFound
     puts "No logos found for #{app.name}"
+    puts ""
+  rescue RestClient::Exceptions::OpenTimeout
+    puts "Timed out connecting to https://www.steamgriddb.com/api/v2/logos/game/#{grid_id}"
     puts ""
   end
   puts "Processed #{counter}/#{total_apps}, #{total_apps - counter} to go"
