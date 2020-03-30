@@ -33,10 +33,14 @@ decoded_applist.applist.apps.each do |app|
                          {authorization: "Bearer #{api_key}"})
     puts "No grids found for #{app.name}" if res.body.json.data.empty?
     res.body.json.data.each do |grid|
-      open(grid.url) do |image|
-        FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids")
-        File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
-        puts "Saved grid #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
+      begin
+        open(grid.url) do |image|
+          FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids")
+          File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
+          puts "Saved grid #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
+        end
+      rescue OpenURI::HTTPError => e
+        puts "Unable to save image #{grid.url}, error: #{e}"
       end
     end
   rescue RestClient::NotFound
@@ -48,11 +52,14 @@ decoded_applist.applist.apps.each do |app|
                          {authorization: "Bearer #{api_key}"})
     puts "No heroes found for #{app.name}" if res.body.json.data.empty?
     res.body.json.data.each do |grid|
-      open(grid.url) do |image|
-        FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/heroes")
-        File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/heroes/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
-        puts "Saved hero #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
-
+      begin
+        open(grid.url) do |image|
+          FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/heroes")
+          File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/heroes/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
+          puts "Saved hero #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
+        end
+      rescue OpenURI::HTTPError => e
+        puts "Unable to save image #{grid.url}, error: #{e}"
       end
     end
   rescue RestClient::NotFound
@@ -64,10 +71,14 @@ decoded_applist.applist.apps.each do |app|
                          {authorization: "Bearer #{api_key}"})
     puts "No logos found for #{app.name}" if res.body.json.data.empty?
     res.body.json.data.each do |grid|
-      open(grid.url) do |image|
-        FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos")
-        File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
-        puts "Saved logo #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
+      begin
+        open(grid.url) do |image|
+          FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos")
+          File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
+          puts "Saved logo #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
+        end
+      rescue OpenURI::HTTPError => e
+        puts "Unable to save image #{grid.url}, error: #{e}"
       end
     end
   rescue RestClient::NotFound
