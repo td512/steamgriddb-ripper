@@ -2,7 +2,6 @@ require 'rest-client'
 require 'json'
 require 'nice_hash'
 require 'fileutils'
-require 'open-uri'
 
 api_key = '' # API Key from https://www.steamgriddb.com/profile/preferences
 
@@ -36,13 +35,12 @@ decoded_applist.applist.apps.each do |app|
     puts "No grids found for #{app.name}" if res.body.json.data.empty?
     res.body.json.data.each do |grid|
       begin
-        open(grid.url) do |image|
-          FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids")
-          File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
-          puts "Saved grid #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
-        end
-      rescue OpenURI::HTTPError => e
-        puts "Unable to save image #{grid.url}, error: #{e}"
+        image = RestClient.get(grid.url)
+        FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids")
+        File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.body) }
+        puts "Saved grid #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
+      rescue RestClient::Exceptions::OpenTimeout
+        puts "Timed out connecting to #{grid.url}"
       end
     end
   rescue RestClient::NotFound
@@ -57,13 +55,12 @@ decoded_applist.applist.apps.each do |app|
     puts "No heroes found for #{app.name}" if res.body.json.data.empty?
     res.body.json.data.each do |grid|
       begin
-        open(grid.url) do |image|
+        image = RestClient.get(grid.url)
           FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/heroes")
-          File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/heroes/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
+          File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/heroes/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.body) }
           puts "Saved hero #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
-        end
-      rescue OpenURI::HTTPError => e
-        puts "Unable to save image #{grid.url}, error: #{e}"
+      rescue RestClient::Exceptions::OpenTimeout
+        puts "Timed out connecting to #{grid.url}"
       end
     end
   rescue RestClient::NotFound
@@ -78,13 +75,12 @@ decoded_applist.applist.apps.each do |app|
     puts "No logos found for #{app.name}" if res.body.json.data.empty?
     res.body.json.data.each do |grid|
       begin
-        open(grid.url) do |image|
-          FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos")
-          File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.read) }
-          puts "Saved logo #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
-        end
-      rescue OpenURI::HTTPError => e
-        puts "Unable to save image #{grid.url}, error: #{e}"
+        image = RestClient.get(grid.url)
+        FileUtils.mkdir_p("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos")
+        File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.body) }
+        puts "Saved logo #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
+      rescue RestClient::Exceptions::OpenTimeout
+        puts "Timed out connecting to #{grid.url}"      
       end
     end
   rescue RestClient::NotFound
