@@ -18,7 +18,7 @@ decoded_applist.applist.apps.each do |app|
     grid_id = res.body.json.data.id
   rescue RestClient::NotFound
     puts "[INFO] No games found for #{app.name}, skipping"
-    puts "[INFO] Processed #{counter}/#{total_apps}, #{total_apps - counter} to go"
+    puts "[STATS] Processed #{counter}/#{total_apps}, #{total_apps - counter} to go"
     counter += 1
     puts ""
     next
