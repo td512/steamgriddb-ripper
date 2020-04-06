@@ -41,6 +41,8 @@ decoded_applist.applist.apps.each do |app|
         puts "Saved grid #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
       rescue RestClient::Exceptions::OpenTimeout
         puts "Timed out connecting to #{grid.url}"
+      rescue RestClient::Unauthorized, RestClient::Forbidden
+        puts "Got 403 Forbidden for #{grid.url}"
       end
     end
   rescue RestClient::NotFound
@@ -61,6 +63,8 @@ decoded_applist.applist.apps.each do |app|
           puts "Saved hero #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
       rescue RestClient::Exceptions::OpenTimeout
         puts "Timed out connecting to #{grid.url}"
+      rescue RestClient::Unauthorized, RestClient::Forbidden
+        puts "Got 403 Forbidden for #{grid.url}"
       end
     end
   rescue RestClient::NotFound
@@ -80,7 +84,9 @@ decoded_applist.applist.apps.each do |app|
         File.open("output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/logos/#{grid.url.split('/').last}", 'wb') { |f| f.write(image.body) }
         puts "Saved logo #{grid.id} to output/#{app.name.gsub(/[^0-9A-Za-z.\-\ \(\)\,\.\'\_\[\]\;\'\!\@\#\$\%\^\&\+\=\-]/, '-')} (#{app.appid})/grids/#{grid.url.split('/').last}"
       rescue RestClient::Exceptions::OpenTimeout
-        puts "Timed out connecting to #{grid.url}"      
+        puts "Timed out connecting to #{grid.url}"
+      rescue RestClient::Unauthorized, RestClient::Forbidden
+        puts "Got 403 Forbidden for #{grid.url}"
       end
     end
   rescue RestClient::NotFound
